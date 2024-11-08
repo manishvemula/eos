@@ -13,19 +13,23 @@ int main(){
 	while(1){
 		pid=fork();
 		if(pid==-1){
-			printf("fork failed at child count=%d\n",cnt);
+		printf("fork failed at child count=%d\n",cnt);
 			_exit(0);
 		}
 		else if(pid==0){
-			sleep(5);
+			//sleep(5);
+			cnt++;
 			_exit(0);
 		}
 		else{
 			cnt++;
-			printf("child count=%d\n",cnt);
+//			printf("child count=%d\n",cnt);
+//			sleep(1);
 		}
 		//printf("waitpid=%d",ret);
 	}
-//	waitpid(pid,&s,0);
+	while(waitpid(-1,&s,0)<0){
+		printf("exit status:%d\n",WEXITSTATUS(s));
+	}
 	return 0;
 }
