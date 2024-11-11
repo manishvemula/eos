@@ -9,6 +9,7 @@ Ensure that process isn't left zombie.**/
 #include<signal.h>
 
 void handle_sigchld(int sig) {
+printf("exit status:%d\n",WEXITSTATUS(sig));
 while (waitpid(-1, &sig , 0) > 0);
 }
 
@@ -16,7 +17,7 @@ void sig_handler(int s){
 	printf("signal caught:%d ,use 'exit' to quit\n",s);
 }
 int main(){
-	int i,s,ret,err;
+	int s,ret,err;
 	char cmd[512],*ptr;
 	char *args[32];
 	struct sigaction sa;
@@ -38,13 +39,7 @@ int main(){
 	}
 	while(1){
 		printf("cmd> ");
-		fgets(cmd,sizeof(cmd),stdin);
-		strtok(cmd,"\n");
-		int background = 0; if (cmd[strlen(cmd) - 1] == '&')
-		{
-		background = 1; 
-		cmd[strlen(cmd) - 1] = '\0';
-		}
+		gets(cmd);	
 		int i=0;
 		ptr=strtok(cmd," ");
 		args[i]=ptr;
@@ -62,16 +57,11 @@ int main(){
 		else{
 			ret=fork();
 			if(ret==0){
-				err=execv(args[0],args);
+				err=execvp(args[0],args);
 				if(err<0){
 					perror("exec failed..\n");
 					_exit(1);
 				}
-				else{
-				if (!background) {
-					waitpid(ret,&s,0);
-					printf("exit status:%d\n",WEXITSTATUS(s));
-				}}
 			}
 		}
 	}
