@@ -58,17 +58,17 @@ int main(){
 	else{
 		//msg_t m2;
 		printf("waiting for 2 numbers....\n");
-		ret=msgrcv(mqid,&m2, sizeof(msg_t)-sizeof(long),101,0);
+		ret=msgrcv(mqid,&m1, sizeof(msg_t)-sizeof(long),101,0);
         if(ret<0){
 			perror("msgrcv failed");
 		}
 		else{
-			printf("parent: recieved from child is %d,%d\n",m2.d1,m2.d2);
+			printf("parent: recieved from child is %d,%d\n",m1.d1,m1.d2);
 		
 
 		resmsg_t m3;
 		m3.id=102;
-		m3.res=m1.d1+m2.d2;
+		m3.res=m1.d1+m1.d2;
 		ret=msgsnd(mqid, &m3, sizeof(resmsg_t)-sizeof(long), 0);
 		if(ret<0){
 			perror("P:msgsnd fail");
