@@ -1,7 +1,5 @@
-/**Create a thread to sort given array of 10 integers using selection sort.
-Main thread should print the result after sorting is completed.
-Hint: Pass array to thread function (via arg4 of pthread_create()).**/
-
+/**reate a thread to sort given array of "n" integers using bubble sort
+. Main thread should print the result after sorting is completed.**/
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -12,16 +10,14 @@ Hint: Pass array to thread function (via arg4 of pthread_create()).**/
 #define SIZE 5
 #define SWAP(a,b){ int temp=a;a=b;b=temp;}
 
-void * selectionsort(void *param){
+void * bubblesort(void *param){
 	int *arr=(int *)param;
-	for(int i=0;i<SIZE-1;i++){
-		int min=i;
-		for(int j=i+1;j<SIZE;j++){
-			if(arr[j]<arr[min]){
-				min=j;
+	for(int i=0;i<SIZE;i++){
+		for(int j=0;j<SIZE;j++){
+			if(arr[i]<arr[j]){
+				SWAP(arr[i],arr[j]);
 			}
 		}
-		SWAP(arr[i],arr[min]);
 	}
 	/**for(int i=0;i<SIZE;i++){
 		printf("%d\n",arr[i]);
@@ -34,10 +30,9 @@ int main(){
 	pthread_t t;
 	int ret;
 	int arr[SIZE]={3,5,4,2,9};
-	ret=pthread_create(&t,NULL,selectionsort,arr);
+	ret=pthread_create(&t,NULL,bubblesort,arr);
 	if(ret!=0){
 	perror("fail");
-	return 1;
 	}
 	pthread_join(t,NULL);
 	printf("sorted array:\n");
